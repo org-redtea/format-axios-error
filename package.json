@@ -1,0 +1,84 @@
+{
+  "name": "@redtea/format-axios-error",
+  "version": "0.0.0",
+  "description": "Pretty format axios error. Build with logform and can be used in browser and node js environments.",
+  "type": "commonjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "browser": "./dist/index.umd.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.cjs",
+    "browser": "./dist/index.umd.js",
+    "script": "./dist/index.umd.js",
+    "electron": "./dist/index.cjs"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "axios",
+    "logform",
+    "winston",
+    "format",
+    "error",
+    "pretty",
+    "axios-error",
+    "axios-error-format",
+    "format-axios-error",
+    "logger",
+    "log",
+    "error-format",
+    "winston-axios-error"
+  ],
+  "files": [
+    "./dist/",
+    "./types/",
+    "./README.md"
+  ],
+  "scripts": {
+    "preversion": "package-check && yarn test",
+    "prepack": "yarn build",
+    "build:esnext": "rimraf esnext && tsc",
+    "build": "yarn build:esnext && rimraf dist && rollup -c",
+    "test": "ts-mocha -p test/tsconfig.json 'test/**/*.spec.ts' -colors"
+  },
+  "author": "Kirill Khoroshilov <mr.hokid@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/org-redtea/format-axios-error.git"
+  },
+  "dependencies": {
+    "logform": "2.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.12.3",
+    "@babel/preset-env": "7.12.1",
+    "@rollup/plugin-babel": "5.2.1",
+    "@rollup/plugin-commonjs": "16.0.0",
+    "@rollup/plugin-node-resolve": "10.0.0",
+    "@skypack/package-check": "0.2.2",
+    "@types/chai": "4.2.14",
+    "@types/expect": "24.3.0",
+    "@types/mocha": "8.0.4",
+    "@types/triple-beam": "^1.3.2",
+    "axios": "0.21.0",
+    "axios-mock-adapter": "1.19.0",
+    "chai": "4.2.0",
+    "mocha": "8.2.1",
+    "rimraf": "3.0.2",
+    "rollup": "2.33.1",
+    "ts-mocha": "8.0.0",
+    "typescript": "4.0.5"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 11"
+  ]
+}

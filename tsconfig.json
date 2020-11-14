@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "module": "ES2015",
+    "moduleResolution": "Node",
+    "declarationDir": "./types",
+    "outDir": "./esnext",
+    "rootDir": "./src",
+    "importHelpers": false,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
