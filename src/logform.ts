@@ -9,7 +9,7 @@ export interface TransformableInfo<T = any> extends AxiosErrorFormatError<T> {
     level: string;
 }
 
-export const axiosFormat = logformFormat((error) => {
+export const axiosError = logformFormat((error) => {
     const storedInMessage = isAxiosError(error.message);
     const axiosError: AxiosError | undefined = storedInMessage
         ? error.message as unknown as AxiosError

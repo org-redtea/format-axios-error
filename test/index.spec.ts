@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {LEVEL, MESSAGE} from '../src/symbols';
-import {axiosFormat} from '../src/logform';
+import {axiosError} from '../src/logform';
 import {format} from '../src';
 import {axiosError404} from './fixtures/axios-error-404';
 import {axiosErrorConnectionRefused} from './fixtures/axios-error-connection-refused';
@@ -114,7 +114,7 @@ describe('format', () => {
 });
 
 describe('logform', () => {
-    const logformFormat = axiosFormat();
+    const logformFormat = axiosError();
 
     it('should format error with response', () => {
 

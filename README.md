@@ -58,7 +58,7 @@ will print
 }
 
 ```
-_Stack trace, response data and headers omitted in this example. To see full log message you can run code example locally_
+_Response data and headers omitted in this example. To see full log message you can run code example locally_
 
 
 ### Winston
@@ -101,7 +101,6 @@ will print
   },
   "isAxiosError": true,
   "level": "error",
-  "stack": [stack],
   "response": {
     "status": 404,
     "data": [data],
