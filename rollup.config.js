@@ -1,3 +1,4 @@
+import path from 'path';
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
@@ -6,16 +7,16 @@ import pkg from './package.json';
 
 const config = [
   {
-    input: 'esnext/index.js',
+    input: 'dist/index.js',
     output: {
       name: 'AxiosErrorFormat',
-      file: pkg.browser,
+      file: path.join('dist', pkg.browser),
       format: 'umd',
-      exports: 'named',
-      esModule: true
+      exports: 'default',
+      compact: true
     },
     plugins: [
-      resolve(),
+      resolve({ browser: true }),
       commonjs(),
       babel({
         babelHelpers: 'bundled'
@@ -23,41 +24,19 @@ const config = [
     ]
   },
   {
-    input: 'esnext/index.js',
+    input: 'dist/index.mjs',
     output: {
-      name: 'AxiosErrorFormat',
-      file: pkg.main,
-      format: 'cjs',
-      exports: 'named'
+      file: path.join('dist', 'index.browser.mjs'),
+      format: 'es',
+      exports: 'named',
+      compact: true
     },
     plugins: [
-      resolve(),
+      resolve({ browser: true }),
       commonjs(),
       babel({
         babelHelpers: 'bundled'
       })
-    ],
-    external: [
-      'logform/format.js',
-    ]
-  },
-  {
-    input: 'esnext/index.js',
-    output: [
-      {
-        file: pkg.module,
-        format: 'es'
-      }
-    ],
-    plugins: [
-      resolve(),
-      commonjs(),
-      babel({
-        babelHelpers: 'bundled'
-      })
-    ],
-    external: [
-      'logform/format.js',
     ]
   }
 ];

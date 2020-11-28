@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "module": "ES2015",
-    "moduleResolution": "Node",
-    "declarationDir": "./types",
-    "outDir": "./esnext",
+    "target": "es2015",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
     "rootDir": "./src",
     "importHelpers": false,
     "strict": true,

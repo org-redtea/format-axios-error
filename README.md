@@ -1,6 +1,6 @@
 # format-axios-error
 
-Pretty format [axios error](https://github.com/axios/axios#handling-errors). Build with [logform](https://github.com/winstonjs/logform) and can be used in browser and node js environments.
+Pretty format [axios error](https://github.com/axios/axios#handling-errors). Can be used with [logform](https://github.com/winstonjs/logform) and [winston](https://github.com/winstonjs/winston).
 
 # Installation
 
@@ -18,63 +18,57 @@ $ npm install -E @redtea/format-axios-error
 
 # Usage
 
-### NodeJS
+After formatting you will get another instance of axios error. Formatter will strip values of function type, request object and other data that not useful in logs.
 
+### NodeJS
 
 ```javascript
 const axios = require('axios');
-const {axiosError} = require('@redtea/format-axios-error');
-
-const formatAxiosError = axiosError();
+const {format} = require('@redtea/format-axios-error');
 
 axios
   .get('https://google.com/give-404')
   .catch(error => {
     console.log(
-      formatAxiosError
-        .transform(error)
+      JSON.stringify(format(error), null, 2)
     )
   });
 ```
-Example above will print
+will print
 ```
 {
-  config: {
-    url: 'https://google.com/give-404',
-    method: 'get',
-    headers: {
-      ...[headers]
-    },
-    timeout: 0,
-    xsrfCookieName: 'XSRF-TOKEN',
-    xsrfHeaderName: 'X-XSRF-TOKEN',
-    maxContentLength: -1,
-    maxBodyLength: -1
+  "name": "Error",
+  "isAxiosError": true,
+  "config": {
+    "url": "https://google.com/give-404",
+    "method": "get",
+    "headers": [headers],
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "maxBodyLength": -1
   },
-  isAxiosError: true,
-  stack: [stack trace],
-  response: {
-    status: 404,
-    data: [data],
-    headers: {
-      ...[headers]
-    },
-    statusText: 'Not Found'
-  },
-  level: 'error',
-  message: 'Request failed with status code 404',
-  [Symbol(level)]: 'error',
-  [Symbol(message)]: 'Request failed with status code 404'
+  "response": {
+    "data": [data],
+    "status": 404,
+    "statusText": "Not Found",
+    "headers": [headers]
+  }
 }
+
 ```
 _Stack trace, response data and headers omitted in this example. To see full log message you can run code example locally_
 
+
 ### Winston
+
+This example show how provide formatter for winston, but you can use the same module for logform.
 
 ```javascript
 const winston = require('winston');
 const axios = require('axios');
-const {axiosError} = require('@redtea/format-axios-error');
+const {axiosError} = require('@redtea/format-axios-error/logform');
 const {combine, json} = winston.format;	
 
 const logger = winston.createLogger({
@@ -92,16 +86,13 @@ axios
   .get('https://google.com/give-404')
   .catch(error => logger.error(error))
 ```
-Will print
+will print
 ```
 {
   "config": {
     "url": "https://google.com/give-404",
     "method": "get",
-    "headers": {
-      "Accept": "application/json, text/plain, */*",
-      "User-Agent": "axios/0.21.0"
-    },
+    "headers": [headers],
     "timeout": 0,
     "xsrfCookieName": "XSRF-TOKEN",
     "xsrfHeaderName": "X-XSRF-TOKEN",
@@ -114,9 +105,7 @@ Will print
   "response": {
     "status": 404,
     "data": [data],
-    "headers": {
-      ...[headers]
-    },
+    "headers": [headers],
     "statusText": "Not Found"
   },
   "message": "Request failed with status code 404"
@@ -136,14 +125,15 @@ Will print
 </head>
 <body>
 <script>
-  const formatAxiosError = AxiosErrorFormat.axiosError();
-
   axios
     .get('https://www.googleapis.com/give-404')
     .catch(error => {
       console.log(
-        formatAxiosError
-          .transform(error)
+        JSON.stringify(
+          AxiosErrorFormat.format(error),
+          null,
+          2
+        )
       )
     })
 </script>
