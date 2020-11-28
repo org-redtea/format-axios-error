@@ -1,6 +1,6 @@
 {
   "name": "@redtea/format-axios-error",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Pretty format axios error. Can by used with logform and winston.",
   "type": "commonjs",
   "main": "index.js",
