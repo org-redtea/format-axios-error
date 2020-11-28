@@ -1,2 +1,2 @@
 import origin from './logform.js';
-export const axiosFormat = origin.axiosFormat;
+export const axiosError = origin.axiosError;
