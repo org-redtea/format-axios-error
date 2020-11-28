@@ -6,6 +6,7 @@
   "main": "index.js",
   "module": "index.mjs",
   "browser": "index.umd.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
       "import": "./index.mjs",
