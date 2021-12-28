@@ -4,12 +4,17 @@ import {axiosError} from '../src/logform';
 import {format} from '../src';
 import {axiosError404} from './fixtures/axios-error-404';
 import {axiosErrorConnectionRefused} from './fixtures/axios-error-connection-refused';
+import {axiosErrorRequestReadable} from './fixtures/axios-error-request-readable';
+import {axiosErrorResponseReadable} from './fixtures/axios-error-response-readable';
 
 
 function expectFormat(
     message: string,
     method: string,
     url: string,
+    config?: {
+        data?: any
+    },
     response?: {
         status: number,
         statusText: string
@@ -20,14 +25,7 @@ function expectFormat(
     checkInstance: boolean = true,
 ) {
     return (formatObj: any) => {
-        if (checkInstance) {
-            expect(formatObj).instanceOf(Error);
-        }
-        expect(formatObj.message).to.eq(message);
-        expect(formatObj.name).to.eq('Error');
-        expect(formatObj.isAxiosError).to.eq(true);
-        expect(formatObj.stack).to.eq('0');
-        expect(formatObj.config).to.deep.eq({
+        const expectedConfig = Object.assign({}, {
             method,
             url,
             headers: {},
@@ -52,7 +50,15 @@ function expectFormat(
             withCredentials: true,
             xsrfCookieName: '0',
             xsrfHeaderName: '0'
-        });
+        }, config);
+        if (checkInstance) {
+            expect(formatObj).instanceOf(Error);
+        }
+        expect(formatObj.message).to.eq(message);
+        expect(formatObj.name).to.eq('Error');
+        expect(formatObj.isAxiosError).to.eq(true);
+        expect(formatObj.stack).to.eq('0');
+        expect(formatObj.config).to.deep.eq(expectedConfig);
 
         if (response) {
             expect(formatObj.response).to.deep.eq(response);
@@ -77,13 +83,13 @@ function expectTransformableInfo(
 describe('format', () => {
 
     it('should format error with response', () => {
-
         const actual = format(axiosError404);
 
         expectFormat(
             'Request failed with status code 404',
             'GET',
             '/path',
+            undefined,
             {
                 data: 0,
                 status: 404,
@@ -102,28 +108,67 @@ describe('format', () => {
             'GET',
             '/path',
             undefined,
+            undefined,
             'ECONNREFUSED'
         )(actual);
     });
 
-    it('should throw if is not axios error', () => {
+    it('should return original error if it is not an axios error', () => {
         const error = new Error();
 
-        expect(() => format(error as any)).to.throw(TypeError, 'Invalid axios error');
+        expect(format(error)).to.eq(error);
+    });
+
+    it('should format readable in config', () => {
+        const actual = format(axiosErrorRequestReadable);
+
+        expectFormat(
+            'Request failed with status code 404',
+            'GET',
+            '/path',
+            {
+                data: '[Readable]'
+            },
+            {
+                data: 0,
+                status: 404,
+                statusText: 'Not Found',
+                headers: {}
+            },
+            undefined
+        )(actual);
+    });
+
+    it('should format readable in response', () => {
+        const actual = format(axiosErrorResponseReadable);
+
+        expectFormat(
+            'Request failed with status code 404',
+            'GET',
+            '/path',
+            undefined,
+            {
+                data: '[Readable]',
+                status: 404,
+                statusText: 'Not Found',
+                headers: {}
+            },
+            undefined
+        )(actual);
     });
 });
 
 describe('logform', () => {
     const logformFormat = axiosError();
 
-    it('should format error with response', () => {
-
+    it('should format', () => {
         const actual = logformFormat.transform(axiosError404 as any);
 
         expectFormat(
             'Request failed with status code 404',
             'GET',
             '/path',
+            undefined,
             {
                 data: 0,
                 status: 404,
@@ -136,71 +181,5 @@ describe('logform', () => {
         expectTransformableInfo(
             'error',
         )(actual);
-    });
-
-    it('should format error without response', () => {
-        const actual = logformFormat.transform(axiosErrorConnectionRefused as any);
-
-        expectFormat(
-            'connect ECONNREFUSED 0.0.0.0:80',
-            'GET',
-            '/path',
-            undefined,
-            'ECONNREFUSED',
-            false
-        )(actual);
-        expectTransformableInfo(
-            'error',
-        )(actual);
-    });
-
-    it('should format error with response if provided in message property', () => {
-        const actual = logformFormat.transform({
-            level: 'error',
-            message: axiosError404
-        });
-
-        expectFormat(
-            'Request failed with status code 404',
-            'GET',
-            '/path',
-            {
-                data: 0,
-                status: 404,
-                statusText: 'Not Found',
-                headers: {}
-            },
-            undefined,
-            false
-        )(actual);
-        expectTransformableInfo(
-            'error',
-        )(actual);
-    });
-
-    it('should format error without response if provided in message property', () => {
-        const actual = logformFormat.transform({
-            level: 'error',
-            message: axiosErrorConnectionRefused
-        });
-
-        expectFormat(
-            'connect ECONNREFUSED 0.0.0.0:80',
-            'GET',
-            '/path',
-            undefined,
-            'ECONNREFUSED',
-            false
-        )(actual);
-        expectTransformableInfo(
-            'error',
-        )(actual);
-    });
-
-    it('should pass not axios error', () => {
-        const error = new Error();
-        const actual = logformFormat.transform(error as any);
-
-        expect(actual).to.eq(error);
     });
 });

@@ -2,12 +2,12 @@ import {AxiosError,} from 'axios';
 import {AxiosErrorFormatError, CONFIG_KEYS, RESPONSE_KEYS} from './axios-error-format';
 
 
-export function format<T = any>(error: AxiosError<T>): AxiosErrorFormatError<T> {
+export function format<E = any>(error: E): E extends AxiosError<infer T> ? AxiosErrorFormatError<T> : E {
     if (!isAxiosError(error)) {
-        throw new TypeError('Invalid axios error')
+        return error as any;
     }
 
-    const formatError: Partial<AxiosErrorFormatError<T>> = new Error(error.message);
+    const formatError: Partial<AxiosErrorFormatError> = new Error(error.message);
 
     formatError.name = error.name;
     formatError.stack = error.stack;
@@ -17,7 +17,9 @@ export function format<T = any>(error: AxiosError<T>): AxiosErrorFormatError<T> 
 
     for (const configKey of CONFIG_KEYS) {
         if (error.config[configKey] !== undefined) {
-            formatError.config[configKey] = error.config[configKey];
+            formatError.config[configKey] = configKey === 'data'
+                ? formatData(error.config[configKey])
+                : error.config[configKey];
         }
     }
 
@@ -25,12 +27,24 @@ export function format<T = any>(error: AxiosError<T>): AxiosErrorFormatError<T> 
         formatError.response = {} as any;
         for (const responseKey of RESPONSE_KEYS) {
             if (error.response[responseKey] !== undefined) {
-                (formatError.response as any)[responseKey] = error.response[responseKey];
+                (formatError.response as any)[responseKey] = responseKey === 'data'
+                  ? formatData(error.response[responseKey])
+                  : error.response[responseKey];
             }
         }
     }
 
-    return formatError as AxiosErrorFormatError<T>;
+    return formatError as any;
+}
+
+function formatData(data: any): any {
+    if (global && global.process) {
+        if (data instanceof require('stream').Readable) {
+            return '[Readable]';
+        }
+    }
+
+    return data;
 }
 
 export function isAxiosError(error: any): error is AxiosError {
