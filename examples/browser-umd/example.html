@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>format-axios-error browser example</title>
+    <script src="./node_modules/axios/dist/axios.js" type="application/javascript"></script>
+    <script src="./node_modules/@redtea/format-axios-error/index.umd.js" type="application/javascript"></script>
+</head>
+<body>
+<script>
+  axios
+    .get('https://www.googleapis.com/give-404')
+    .catch(error => {
+      console.log(
+        JSON.stringify(AxiosErrorFormat.format(error), null, 2)
+      )
+    })
+</script>
+</body>
+</html>

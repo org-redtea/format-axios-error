@@ -1,0 +1,12 @@
+{
+  "name": "example-node-esmodules",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --experimental-modules --experimental-json-modules example.mjs"
+  },
+  "dependencies": {
+    "@redtea/format-axios-error": "file:../../dist",
+    "axios": "0.21.0"
+  }
+}

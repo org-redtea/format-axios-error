@@ -1,0 +1,12 @@
+{
+  "name": "example-node-commonjs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node example.js"
+  },
+  "dependencies": {
+    "@redtea/format-axios-error": "file:../../dist",
+    "axios": "0.21.0"
+  }
+}

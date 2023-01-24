@@ -1,0 +1,12 @@
+{
+  "name": "example-browser-umd",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "npx http-server . -o"
+  },
+  "dependencies": {
+    "@redtea/format-axios-error": "file:../../dist",
+    "axios": "0.21.0"
+  }
+}
