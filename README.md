@@ -1,10 +1,8 @@
-# format-axios-error
+# @redtea/format-axios-error
 
-Format [axios error](https://github.com/axios/axios#handling-errors) for logs. Support for [logform](https://github.com/winstonjs/logform) and [winston](https://github.com/winstonjs/winston).
+This is a small library that provides a function to format an [axios error object]((https://github.com/axios/axios#handling-errors)) for logging purposes. It strips any unnecessary information from the error object, making it more readable and easy to understand when reviewing logs.
 
-# Motivation
-
-An axios error contains a lot of information that is not useful in logs. `format-axios-error` is created to solve that problem. It takes original axios error instance and create new one cutting redundant data.
+Can be used with [logform](https://github.com/winstonjs/logform) and [winston](https://github.com/winstonjs/winston).
 
 # Installation
 
@@ -22,7 +20,7 @@ $ npm install -E @redtea/format-axios-error
 
 # Usage
 
-There are three ways how to use:
+More usage examples can be found in `examples` directory.
 
 ### NodeJS
 
@@ -62,12 +60,10 @@ will print
 }
 
 ```
-_Response data and headers in this example are omitted. To see full log message run the code snipped locally_
+_In the example, response data and headers  are omitted. Run the code snipped locally to see full log output._
 
 
-### Winston and logform
-
-The following example shows how to use the library with [winston](https://github.com/winstonjs/winston) logger and [logform](https://github.com/winstonjs/logform).
+### How to use with winston and logform
 
 ```javascript
 const winston = require('winston');
