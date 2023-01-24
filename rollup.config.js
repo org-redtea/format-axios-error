@@ -3,7 +3,6 @@ import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
-import pkg from './package.json';
 
 
 const config = [
@@ -11,7 +10,7 @@ const config = [
     input: 'dist/index.js',
     output: {
       name: 'AxiosErrorFormat',
-      file: path.join('dist', pkg.browser),
+      file: path.join('dist', 'index.umd.js'),
       format: 'umd',
       exports: 'default',
       compact: true
