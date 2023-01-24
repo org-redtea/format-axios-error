@@ -12,12 +12,14 @@
   "types": "index.d.ts",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.mjs",
       "require": "./index.js",
       "browser": "./index.umd.js",
       "script": "./index.umd.js"
     },
     "./logform": {
+      "types": "./logform.d.ts",
       "import": "./logform.mjs",
       "require": "./logform.js"
     }
