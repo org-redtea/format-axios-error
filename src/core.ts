@@ -38,7 +38,7 @@ export function format<E = any>(error: E): E extends AxiosError<infer T> ? Axios
 }
 
 function formatData(data: any): any {
-    if (global && global.process) {
+    if (process.env.BROWSER !== 'true') {
         if (data instanceof require('stream').Readable) {
             return '[Readable]';
         }

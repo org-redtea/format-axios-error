@@ -2,6 +2,7 @@ import path from 'path';
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
 import pkg from './package.json';
 
 
@@ -16,7 +17,15 @@ const config = [
       compact: true
     },
     plugins: [
-      resolve({ browser: true }),
+      replace({
+        preventAssignment: true,
+        values: {
+          'process.env.BROWSER': JSON.stringify('true'),
+        }
+      }),
+      resolve({
+        browser: true,
+      }),
       commonjs(),
       babel({
         babelHelpers: 'bundled'
@@ -32,7 +41,15 @@ const config = [
       compact: true
     },
     plugins: [
-      resolve({ browser: true }),
+      replace({
+        preventAssignment: true,
+        values: {
+          'process.env.BROWSER': JSON.stringify('true'),
+        }
+      }),
+      resolve({
+        browser: true,
+      }),
       commonjs(),
       babel({
         babelHelpers: 'bundled'
